@@ -21,7 +21,7 @@ class ChatService:
         start = time.perf_counter()
         citations = self.retrieval_service.search(payload.question, payload.department)
         confidence = round(citations[0].score if citations else 0.0, 2)
-        fallback_used = confidence < 0.35 or not citations
+        fallback_used = confidence < 0.25 or not citations
         answer = self._build_answer(payload.question, citations, fallback_used)
         follow_ups = self._build_follow_ups(citations, payload.department)
         action_items = self._build_action_items(citations, fallback_used)

@@ -12,4 +12,5 @@ dist/
 build/
 coverage/
 backend/data/
+backend/*.db
 frontend/.env.local

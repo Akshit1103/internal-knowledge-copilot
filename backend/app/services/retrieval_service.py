@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 
 from sqlalchemy.orm import Session
 
@@ -25,7 +26,9 @@ class RetrievalService:
 
         scored: list[Citation] = []
         for chunk in chunks:
-            score = cosine_similarity(query_vector, json.loads(chunk.embedding))
+            embedding_score = cosine_similarity(query_vector, json.loads(chunk.embedding))
+            keyword_score = keyword_overlap(question, chunk.content)
+            score = (embedding_score * 0.55) + (keyword_score * 0.45)
             scored.append(
                 Citation(
                     document_id=chunk.document.id,
@@ -50,3 +53,12 @@ def cosine_similarity(a: list[float], b: list[float]) -> float:
     if norm_a == 0 or norm_b == 0:
         return 0.0
     return numerator / (norm_a * norm_b)
+
+
+def keyword_overlap(question: str, content: str) -> float:
+    question_tokens = set(re.findall(r"[a-zA-Z0-9]{3,}", question.lower()))
+    content_tokens = set(re.findall(r"[a-zA-Z0-9]{3,}", content.lower()))
+    if not question_tokens or not content_tokens:
+        return 0.0
+    shared = question_tokens & content_tokens
+    return len(shared) / len(question_tokens)
