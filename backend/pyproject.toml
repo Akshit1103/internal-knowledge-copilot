@@ -1,0 +1,17 @@
+[project]
+name = "internal-knowledge-copilot-backend"
+version = "0.1.0"
+description = "FastAPI backend for an enterprise-style internal knowledge copilot."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "pydantic",
+    "pydantic-settings",
+    "python-multipart",
+    "sqlalchemy",
+    "uvicorn[standard]",
+]
+
+[tool.uv]
+package = false
