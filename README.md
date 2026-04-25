@@ -62,6 +62,21 @@ npm install
 npm run dev
 ```
 
+## Docker Compose
+
+Run the full app stack with:
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
+
+The backend uses SQLite inside a persisted Docker volume, so seeded users and uploaded demo documents survive container restarts.
+
 ## Demo Credentials
 
 - `admin@copilot.local` / `admin123`

@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: knowledge-copilot-backend
+    environment:
+      APP_NAME: Internal Knowledge Copilot API
+      DATABASE_URL: sqlite:///./data/knowledge_copilot.db
+      UPLOAD_DIR: /app/data/uploads
+      CHUNK_SIZE: 900
+      CHUNK_OVERLAP: 150
+      RETRIEVAL_TOP_K: 4
+      EMBEDDING_DIMENSIONS: 96
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_data:/app/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: knowledge-copilot-frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  backend_data:
